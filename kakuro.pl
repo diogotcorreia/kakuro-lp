@@ -24,7 +24,7 @@ espaco_fila(L, espaco(N, EL), D) :-
 % condicao de paragem: chegar ao final da lista
 espaco_fila([], espaco(N, EL), espaco(N, EL)).
 
-% condicao de paragem: encontrar um elemento que não é variável
+% condicao de paragem: encontrar um elemento que nao eh variável
 espaco_fila([P | _], espaco(N, EL), espaco(N, EL)) :- 
   nonvar(P),
   nonvar(N),
