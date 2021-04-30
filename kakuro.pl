@@ -44,3 +44,7 @@ espaco_fila([P | R], espaco(N, L), espaco(N, []), D) :-
 
 espaco_fila([_ | R], espaco(N, L), espaco(N, []), D) :-
   espaco_fila(R, espaco(N, L), espaco(N, []), D).
+
+% espacos_fila/3
+espacos_fila(D, Fila, Espacos) :-
+  bagof(X, espaco_fila(Fila, X, D), Espacos).
