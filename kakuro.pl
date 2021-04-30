@@ -26,7 +26,7 @@ espaco_fila([], espaco(N, EL), espaco(N, EL)) :-
   length(EL, Length),
   Length > 0.
 
-% condicao de paragem: encontrar um elemento que nao eh variável
+% condicao de paragem: encontrar um elemento que nao eh variavel
 espaco_fila([P | _], espaco(N, EL), espaco(N, EL)) :- 
   is_list(P),
   nonvar(N),
@@ -50,3 +50,11 @@ espaco_fila([_ | R], espaco(N, L), espaco(N, []), D) :-
 % espacos_fila/3
 espacos_fila(D, Fila, Espacos) :-
   bagof(X, espaco_fila(Fila, X, D), Espacos).
+
+% espacos_puzzle/2
+espacos_puzzle(Puzzle, Espacos) :-
+  bagof(X, M ^ (member(M, Puzzle), espacos_fila(h, M, X)), Espacos_H),
+  mat_transposta(Puzzle, Puzzle_T),
+  bagof(Y, M ^ (member(M, Puzzle_T), espacos_fila(v, M, Y)), Espacos_V),
+  append(Espacos_H, Espacos_V, Espacos_notflattened),
+  flatten(Espacos_notflattened, Espacos).
