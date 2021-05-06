@@ -135,3 +135,28 @@ permutacoes_possiveis_espaco(Espacos, Perms_soma, espaco(N, Pos), Perms_poss) :-
 permutacoes_possiveis_espacos(Espacos, Perms_poss_esps) :-
   permutacoes_soma_espacos(Espacos, Perms_soma),
   bagof(X, Esp ^ (member(Esp, Espacos), permutacoes_possiveis_espaco(Espacos, Perms_soma, Esp, X)), Perms_poss_esps).
+
+% numeros_comuns/2
+numeros_comuns(Lst_Perms, Numeros_comuns) :-
+  numeros_comuns(Lst_Perms, 1, Numeros_comuns).
+
+% numeros_comuns/3
+% Auxiliar - processo iterativo de numeros_comuns/2
+numeros_comuns([P | _], N, []) :-
+  Prev_N is N - 1,
+  length(P, Prev_N),
+  !.
+
+numeros_comuns(Lst_Perms, N, [(N, Numero) | Numeros_comuns]) :-
+  maplist(nth1(N), Lst_Perms, Lst_Numeros),
+  list_to_set(Lst_Numeros, Set_Numeros),
+  length(Set_Numeros, Length),
+  Length == 1,
+  !,
+  Next_N is N + 1,
+  nth1(1, Lst_Numeros, Numero),
+  numeros_comuns(Lst_Perms, Next_N, Numeros_comuns).
+
+numeros_comuns(Lst_Perms, N, Numeros_comuns) :-
+  Next_N is N + 1,
+  numeros_comuns(Lst_Perms, Next_N, Numeros_comuns).
