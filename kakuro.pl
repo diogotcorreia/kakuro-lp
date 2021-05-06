@@ -7,10 +7,8 @@ combinacoes_soma(N, Els, Soma, Combs) :-
 % permutacoes_soma/4
 permutacoes_soma(N, Els, Soma, Perms) :-
   combinacoes_soma(N, Els, Soma, Combs),
-  !,
-  % TODO why doesn't setof work here?
-  findall(X, (member(Comb, Combs), permutation(X, Comb)), Perms_Unsorted),
-  sort(Perms_Unsorted, Perms).
+  !, % se o combinacoes_soma nao falhar, nao eh necessario voltar a tentar
+  setof(X, Comb ^ (member(Comb, Combs), permutation(X, Comb)), Perms).
 
 % soma_na_direcao/3
 soma_na_direcao([_, S], h, S).
