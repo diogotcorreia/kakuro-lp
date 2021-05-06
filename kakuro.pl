@@ -84,3 +84,14 @@ espaco_com_posicoes_comuns(espaco(N1, L1), espaco(N2, L2)) :-
 % espacos_com_posicoes_comuns/3
 espacos_com_posicoes_comuns(Espacos, Esp, Esps_com) :-
   include(espaco_com_posicoes_comuns(Esp), Espacos, Esps_com).
+
+% permutacoes_soma_espaco/2
+% Auxiliar - utilizada no maplist do permutacoes_soma_espacos
+permutacoes_soma_espaco(espaco(N, L), Perms_soma) :-
+  length(L, Length_L),
+  permutacoes_soma(Length_L, [1,2,3,4,5,6,7,8,9], N, Perms),
+  Perms_soma = [espaco(N, L), Perms].
+
+% permutacoes_soma_espacos/2
+permutacoes_soma_espacos(Espacos, Perms_soma) :-
+  maplist(permutacoes_soma_espaco, Espacos, Perms_soma).
