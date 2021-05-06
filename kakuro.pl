@@ -56,3 +56,31 @@ espacos_puzzle(Puzzle, Espacos) :-
   bagof(Y, M ^ (member(M, Puzzle_T), espacos_fila(v, M, Y)), Espacos_V),
   append(Espacos_H, Espacos_V, Espacos_notflattened),
   flatten(Espacos_notflattened, Espacos).
+
+% membro_igual/2
+% Auxiliar - semelhante ao predicado member, mas nao unifica os elementos
+membro_igual(X, [P | R]) :-
+  X == P;
+  membro_igual(X, R).
+
+% disjuntas/2
+% Auxiliar - verifica se duas listas sao dijuntas, isto eh, se nao tem nenhum
+% elemento em comum
+disjuntas([], _) :- !.
+disjuntas(_, []) :- !.
+
+disjuntas([P | _], L) :-
+  membro_igual(P, L),
+  !, fail.
+
+disjuntas([_ | R], L) :- disjuntas(R, L).
+
+% espaco_com_posicoes_comuns/2
+% Auxiliar - verifica se dois espacos diferentes tem posicoes comuns
+espaco_com_posicoes_comuns(espaco(N1, L1), espaco(N2, L2)) :-
+  espaco(N1, L1) \== espaco(N2, L2),
+  \+(disjuntas(L1, L2)).
+
+% espacos_com_posicoes_comuns/3
+espacos_com_posicoes_comuns(Espacos, Esp, Esps_com) :-
+  include(espaco_com_posicoes_comuns(Esp), Espacos, Esps_com).
