@@ -95,3 +95,34 @@ permutacoes_soma_espaco(espaco(N, L), Perms_soma) :-
 % permutacoes_soma_espacos/2
 permutacoes_soma_espacos(Espacos, Perms_soma) :-
   maplist(permutacoes_soma_espaco, Espacos, Perms_soma).
+
+% membro_espaco_perms_soma/2
+% Auxiliar - verifica se um espaco com perms_soma esta na lista Esps_com
+membro_espaco_perms_soma(Esps_com, [Esp, _]) :-
+  membro_igual(Esp, Esps_com).
+
+% permutacao_impossivel/4
+% Auxiliar - tem sucesso se a permutacao for impossivel (invalida) entre
+% dois espacos que teem posicoes em comum
+permutacao_impossivel(espaco(_, [P1 | _]), Perm, N, [espaco(_, L2), Perms]) :- 
+  membro_igual(P1, L2),
+  append(Perms, L),
+  nth0(N, Perm, Number),
+  !,
+  \+ member(Number, L).
+
+permutacao_impossivel(espaco(EN1, [_ | R1]), Perm, N, [espaco(EN2, R2), P2]) :-
+  Next_N is N + 1,
+  permutacao_impossivel(espaco(EN1, R1), Perm, Next_N, [espaco(EN2, R2), P2]).
+
+% permutacao_possivel_espaco/4
+permutacao_possivel_espaco(Perm, Esp, Espacos, Perms_soma) :-
+  espacos_com_posicoes_comuns(Espacos, Esp, Esps_com),
+  include(membro_espaco_perms_soma(Esps_com), Perms_soma, Perms_soma_com),
+  permutacoes_soma_espaco(Esp, [_, Esp_perms]),
+  !,
+  member(Perm, Esp_perms),
+  exclude(permutacao_impossivel(Esp, Perm, 0), Perms_soma_com, L),
+  length(L, Length_L),
+  length(Perms_soma_com, Length_L2),
+  Length_L == Length_L2.
