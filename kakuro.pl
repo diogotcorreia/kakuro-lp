@@ -130,3 +130,8 @@ permutacao_possivel_espaco(Perm, Esp, Espacos, Perms_soma) :-
 permutacoes_possiveis_espaco(Espacos, Perms_soma, espaco(N, Pos), Perms_poss) :-
   bagof(X, permutacao_possivel_espaco(X, espaco(N, Pos), Espacos, Perms_soma), Perms),
   Perms_poss = [Pos, Perms].
+
+% permutacoes_possiveis_espacos/2
+permutacoes_possiveis_espacos(Espacos, Perms_poss_esps) :-
+  permutacoes_soma_espacos(Espacos, Perms_soma),
+  bagof(X, Esp ^ (member(Esp, Espacos), permutacoes_possiveis_espaco(Espacos, Perms_soma, Esp, X)), Perms_poss_esps).
