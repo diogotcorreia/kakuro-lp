@@ -122,7 +122,6 @@ permutacao_possivel_espaco(Perm, Esp, Espacos, Perms_soma) :-
   permutacoes_soma_espaco(Esp, [_, Esp_perms]),
   !,
   member(Perm, Esp_perms),
-  exclude(permutacao_impossivel(Esp, Perm, 0), Perms_soma_com, L),
+  include(permutacao_impossivel(Esp, Perm, 0), Perms_soma_com, L),
   length(L, Length_L),
-  length(Perms_soma_com, Length_L2),
-  Length_L == Length_L2.
+  Length_L == 0.
