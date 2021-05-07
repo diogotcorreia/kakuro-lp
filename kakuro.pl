@@ -160,3 +160,21 @@ numeros_comuns(Lst_Perms, N, [(N, Numero) | Numeros_comuns]) :-
 numeros_comuns(Lst_Perms, N, Numeros_comuns) :-
   Next_N is N + 1,
   numeros_comuns(Lst_Perms, Next_N, Numeros_comuns).
+
+% atribui_comuns_espacos/1
+% Auxiliar - encontrar os numeros comuns e de seguida unifica-los
+atribui_comuns_espacos([Espaco, Perms]) :-
+  numeros_comuns(Perms, Numeros_comuns),
+  atribui_comuns_espacos(Espaco, Numeros_comuns).
+
+% atribui_comuns_espacos/2
+% Auxiliar - efetuar recursao e unificar os numeros comuns
+atribui_comuns_espacos(_, []).
+
+atribui_comuns_espacos(Espaco, [(N, Numero) | R]) :-
+  nth1(N, Espaco, Numero),
+  atribui_comuns_espacos(Espaco, R).
+
+% atribui_comuns/1
+atribui_comuns(Perms_Possiveis) :-
+  maplist(atribui_comuns_espacos, Perms_Possiveis).
