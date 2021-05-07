@@ -178,3 +178,25 @@ atribui_comuns_espacos(Espaco, [(N, Numero) | R]) :-
 % atribui_comuns/1
 atribui_comuns(Perms_Possiveis) :-
   maplist(atribui_comuns_espacos, Perms_Possiveis).
+
+% permutacao_espaco_possivel/2
+% Auxiliar - verifica se uma permutacao eh possivel para um determinado espaco
+permutacao_espaco_possivel([], []).
+
+permutacao_espaco_possivel([P1 | R1], [_ | R2]) :-
+  var(P1),
+  permutacao_espaco_possivel(R1, R2).
+
+permutacao_espaco_possivel([P1 | R1], [P2 | R2]) :-
+  nonvar(P1),
+  P1 == P2,
+  permutacao_espaco_possivel(R1, R2).
+
+% retira_impossiveis_espaco/2
+% Auxiliar - retira impossiveis de um unico espaco
+retira_impossiveis_espaco([Espaco, Perms], [Espaco, Novas_Perms]) :-
+  include(permutacao_espaco_possivel(Espaco), Perms, Novas_Perms).
+
+% retira_impossiveis/2
+retira_impossiveis(Perms_Possiveis, Novas_Perms_Possiveis) :-
+  maplist(retira_impossiveis_espaco, Perms_Possiveis, Novas_Perms_Possiveis).
