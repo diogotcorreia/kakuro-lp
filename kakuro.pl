@@ -200,3 +200,15 @@ retira_impossiveis_espaco([Espaco, Perms], [Espaco, Novas_Perms]) :-
 % retira_impossiveis/2
 retira_impossiveis(Perms_Possiveis, Novas_Perms_Possiveis) :-
   maplist(retira_impossiveis_espaco, Perms_Possiveis, Novas_Perms_Possiveis).
+
+% simplifica/2
+simplifica(Perms_Possiveis, Novas_Perms_Possiveis) :-
+  atribui_comuns(Perms_Possiveis),
+  retira_impossiveis(Perms_Possiveis, P),
+  Perms_Possiveis \== P,
+  simplifica(P, Novas_Perms_Possiveis).
+
+simplifica(Perms_Possiveis, Novas_Perms_Possiveis) :-
+  atribui_comuns(Perms_Possiveis),
+  retira_impossiveis(Perms_Possiveis, Novas_Perms_Possiveis),
+  Perms_Possiveis == Novas_Perms_Possiveis.
