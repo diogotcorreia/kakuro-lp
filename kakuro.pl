@@ -244,3 +244,19 @@ escolhe_menos_alternativas(Perms_Possiveis, Escolha) :-
   !,
   member(Escolha, Perms_Possiveis),
   permutacao_tem_tamanho_menor(L, Escolha).
+
+% substituir_espaco/3
+% Auxiliar - usada no maplist para substituir em Perms_Possiveis, o elemento
+% Escolha pelo elemento [Esp, [Perm]].
+substituir_espaco([Esp, Lst_Perms], [Esp, _], Escolha) :-
+  Escolha = [Esp, Lst_Perms].
+
+substituir_espaco([Esp, _], [Esp2, Lst_Perms], Escolha) :-
+  Esp \== Esp2,
+  Escolha = [Esp2, Lst_Perms].
+
+% experimenta_perm/3
+experimenta_perm([Esp, Lst_Perms], Perms_Possiveis, Novas_Perms_Possiveis) :-
+  member(Perm, Lst_Perms),
+  Esp = Perm,
+  maplist(substituir_espaco([Esp, [Perm]]), Perms_Possiveis, Novas_Perms_Possiveis).
