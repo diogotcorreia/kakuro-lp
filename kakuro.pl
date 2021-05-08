@@ -280,3 +280,8 @@ resolve_aux(Perms_Possiveis, Novas_Perms_Possiveis) :-
   experimenta_perm(Escolha, Perms_Possiveis, N_Perms_Possiveis),
   simplifica(N_Perms_Possiveis, Novas_Perms_Possiveis),
   maplist(permutacao_terminada, Novas_Perms_Possiveis).
+
+% resolve/1
+resolve(Puzzle) :-
+  inicializa(Puzzle, Perms_Possiveis),
+  resolve_aux(Perms_Possiveis, _).
