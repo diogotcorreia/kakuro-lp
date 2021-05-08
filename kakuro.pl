@@ -212,3 +212,9 @@ simplifica(Perms_Possiveis, Novas_Perms_Possiveis) :-
   atribui_comuns(Perms_Possiveis),
   retira_impossiveis(Perms_Possiveis, Novas_Perms_Possiveis),
   Perms_Possiveis == Novas_Perms_Possiveis.
+
+% inicializa/2
+inicializa(Puzzle, Perms_Possiveis) :-
+  espacos_puzzle(Puzzle, Espacos),
+  permutacoes_possiveis_espacos(Espacos, Perms_P),
+  simplifica(Perms_P, Perms_Possiveis).
