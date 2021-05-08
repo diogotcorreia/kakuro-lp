@@ -218,3 +218,29 @@ inicializa(Puzzle, Perms_Possiveis) :-
   espacos_puzzle(Puzzle, Espacos),
   permutacoes_possiveis_espacos(Espacos, Perms_P),
   simplifica(Perms_P, Perms_Possiveis).
+
+% mais_que_uma_permutacao/1
+% Auxiliar - predicado usado para filtrar espacos que teem mais que uma
+% permutacao
+mais_que_uma_permutacao([_, L]) :-
+  length(L, N),
+  N > 1.
+
+% permutacao_tem_tamanho_menor/2
+% Auxiliar - verificar se um espaco tem o menor tamanho da lista
+permutacao_tem_tamanho_menor([], _).
+
+permutacao_tem_tamanho_menor([[_, P] | R ], [N, Permutacoes]) :-
+  length(P, Length_P),
+  length(Permutacoes, Length_Permutacoes),
+  Length_P >= Length_Permutacoes,
+  permutacao_tem_tamanho_menor(R, [N, Permutacoes]).
+
+% escolhe_menos_alternativas/2
+escolhe_menos_alternativas(Perms_Possiveis, Escolha) :-
+  include(mais_que_uma_permutacao, Perms_Possiveis, L),
+  length(L, N),
+  N > 0,
+  !,
+  member(Escolha, Perms_Possiveis),
+  permutacao_tem_tamanho_menor(L, Escolha).
