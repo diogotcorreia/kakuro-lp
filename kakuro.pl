@@ -137,6 +137,8 @@ permutacoes_possiveis_espacos(Espacos, Perms_poss_esps) :-
   bagof(X, Esp ^ (member(Esp, Espacos), permutacoes_possiveis_espaco(Espacos, Perms_soma, Esp, X)), Perms_poss_esps).
 
 % numeros_comuns/2
+numeros_comuns([], []) :- !, fail.
+
 numeros_comuns(Lst_Perms, Numeros_comuns) :-
   numeros_comuns(Lst_Perms, 1, Numeros_comuns).
 
@@ -242,7 +244,7 @@ escolhe_menos_alternativas(Perms_Possiveis, Escolha) :-
   length(L, N),
   N > 0,
   !,
-  member(Escolha, Perms_Possiveis),
+  member(Escolha, L),
   permutacao_tem_tamanho_menor(L, Escolha).
 
 % substituir_espaco/3
@@ -260,3 +262,21 @@ experimenta_perm([Esp, Lst_Perms], Perms_Possiveis, Novas_Perms_Possiveis) :-
   member(Perm, Lst_Perms),
   Esp = Perm,
   maplist(substituir_espaco([Esp, [Perm]]), Perms_Possiveis, Novas_Perms_Possiveis).
+
+% permutacao_terminada/1
+% Auxiliar - eh verdadeiro se a lista Perms tiver tamanho 1
+permutacao_terminada([_, Perms]) :- length(Perms, 1).
+
+% resolve_aux/2
+resolve_aux(Perms_Possiveis, Novas_Perms_Possiveis) :-
+  escolhe_menos_alternativas(Perms_Possiveis, Escolha),
+  experimenta_perm(Escolha, Perms_Possiveis, N_Perms_Possiveis),
+  simplifica(N_Perms_Possiveis, N2_Perms_Possiveis),
+  \+ maplist(permutacao_terminada, N2_Perms_Possiveis),
+  resolve_aux(N2_Perms_Possiveis, Novas_Perms_Possiveis).
+
+resolve_aux(Perms_Possiveis, Novas_Perms_Possiveis) :-
+  escolhe_menos_alternativas(Perms_Possiveis, Escolha),
+  experimenta_perm(Escolha, Perms_Possiveis, N_Perms_Possiveis),
+  simplifica(N_Perms_Possiveis, Novas_Perms_Possiveis),
+  maplist(permutacao_terminada, Novas_Perms_Possiveis).
